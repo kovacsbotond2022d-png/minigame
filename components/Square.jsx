@@ -1,13 +1,13 @@
 function Square({ value, onSquareClick }) {
   function handleContextMenu(event) {
     event.preventDefault()
-    onSquareClick()
+    onSquareClick('right')
   }
 
   return (
     <button
       className="square"
-      onClick={onSquareClick}
+      onClick={() => onSquareClick('left')}
       onContextMenu={handleContextMenu}
     >
       {value}
