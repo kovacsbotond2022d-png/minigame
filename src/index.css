@@ -1,0 +1,134 @@
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: #e9f2ff;
+  color: #222;
+  font-family: Arial, sans-serif;
+}
+
+.game {
+  width: 90%;
+  max-width: 650px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: white;
+  border: 2px solid #444;
+}
+
+.game-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: #777;
+  font-size: 14px;
+}
+
+.game-header h1 {
+  margin: 10px 0;
+  color: blue;
+  font-size: 42px;
+}
+
+.game-instructions {
+  font-size: 16px;
+}
+
+.game-instructions span {
+  padding: 0 5px;
+}
+
+.scoreboard {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.score-card {
+  flex: 1;
+  padding: 12px 5px;
+  border: 1px solid #555;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.score-card-x {
+  background-color: #dceaff;
+}
+
+.score-card-o {
+  background-color: #ffe4d8;
+}
+
+.score-card-draw {
+  background-color: #eee;
+}
+
+.score-mark,
+.score-label,
+.score-percentage {
+  display: block;
+  margin: 5px 0;
+}
+
+.score-wins {
+  display: block;
+  font-size: 28px;
+}
+
+.game-panel {
+  padding: 15px;
+  border: 1px solid #555;
+  text-align: center;
+}
+
+.game-status {
+  margin: 5px 0 15px;
+  font-weight: bold;
+}
+
+.board {
+  display: inline-grid;
+  gap: 3px;
+  padding: 3px;
+  background-color: #333;
+}
+
+.new-game-button {
+  margin-top: 15px;
+  padding: 10px 18px;
+  border: 1px solid #333;
+  background-color: #ffdf57;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.games-played {
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .game {
+    width: 96%;
+    margin: 10px auto;
+    padding: 12px;
+  }
+
+  .scoreboard {
+    gap: 5px;
+  }
+
+  .score-card {
+    padding: 8px 3px;
+  }
+
+}
