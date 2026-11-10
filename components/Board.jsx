@@ -1,29 +1,28 @@
 import { useState } from "react";
 import Square from "./Square.jsx";
-import { getGameResult } from "../src/utils/gameUtils.js";
+import { win_check } from "../src/utils/gameUtils.js";
 
 function Board() {
-    const [squares, setSquares] = useState(Array(9).fill(null));
+    const [status, setStatus] = useState(Array(9).fill(null));
     const [winner, setWinner] = useState(null);
     const [isDraw, setIsDraw] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
     const [scores, setScores] = useState({ x: 0, o: 0, draws: 0 });
     const completedGames = scores.x + scores.o + scores.draws;
-    const gameOver = winner !== null || isDraw;
 
     function handleClick(idx, mouseButton) {
-        if (gameOver || squares[idx] !== null) {
+        if (gameOver || status[idx] !== null) {
             return;
         }
 
         const mark = mouseButton === "left" ? "x" : "o";
-        const nextSquares = [...squares];
-        nextSquares[idx] = mark;
-        setSquares(nextSquares);
+        const newStatus = [...status];
+        newStatus[idx] = mark;
 
-        const result = getGameResult(nextSquares);
+        const result = win_check(newStatus, mark, setWinner, setGameOver);
+        setStatus(newStatus);
 
         if (result.winner) {
-            setWinner(result.winner);
             setScores((currentScores) => ({
                 ...currentScores,
                 [result.winner]: currentScores[result.winner] + 1,
@@ -38,15 +37,14 @@ function Board() {
     }
 
     function startNewGame() {
-        setSquares(Array(9).fill(null));
+        setStatus(Array(9).fill(null));
         setWinner(null);
         setIsDraw(false);
+        setGameOver(false);
     }
 
     function winPercentage(wins) {
-        return completedGames === 0
-            ? 0
-            : Math.round((wins / completedGames) * 100);
+        return completedGames === 0 ? 0 : Math.round((wins / completedGames) * 100);
     }
 
     return (
@@ -55,8 +53,7 @@ function Board() {
                 <p className="eyebrow">Játssz egy kört!</p>
                 <h1>Amőba</h1>
                 <p className="game-instructions">
-                    Bal kattintás: X <span aria-hidden="true">·</span> Jobb
-                    kattintás: O
+                    Bal kattintás: X <span aria-hidden="true">·</span> Jobb kattintás: O
                 </p>
             </header>
 
@@ -65,9 +62,7 @@ function Board() {
                     <span className="score-mark">X</span>
                     <span className="score-label">X győzelmei</span>
                     <strong className="score-wins">{scores.x}</strong>
-                    <span className="score-percentage">
-                        {winPercentage(scores.x)}% győzelmi arány
-                    </span>
+                    <span className="score-percentage">{winPercentage(scores.x)}% győzelmi arány</span>
                 </article>
                 <article className="score-card score-card-draw">
                     <span className="score-label">Döntetlen</span>
@@ -78,19 +73,13 @@ function Board() {
                     <span className="score-mark">O</span>
                     <span className="score-label">O győzelmei</span>
                     <strong className="score-wins">{scores.o}</strong>
-                    <span className="score-percentage">
-                        {winPercentage(scores.o)}% győzelmi arány
-                    </span>
+                    <span className="score-percentage">{winPercentage(scores.o)}% győzelmi arány</span>
                 </article>
             </section>
 
             <section className="game-panel" aria-label="Amőba játéktábla">
                 <p className="game-status" aria-live="polite">
-                    {winner
-                        ? `${winner.toUpperCase()} nyert!`
-                        : isDraw
-                          ? "Döntetlen!"
-                          : "Válassz egy mezőt!"}
+                    {winner ? `${winner.toUpperCase()} nyert!` : isDraw ? "Döntetlen!" : "Válassz egy mezőt!"}
                 </p>
                 <div className="board" role="group" aria-label="3x3-as tábla">
                     {[0, 1, 2].map((row) => (
@@ -101,10 +90,8 @@ function Board() {
                                 return (
                                     <Square
                                         key={index}
-                                        value={squares[index]}
-                                        onSquareClick={(mouseButton) =>
-                                            handleClick(index, mouseButton)
-                                        }
+                                        value={status[index]}
+                                        onSquareClick={(mouseButton) => handleClick(index, mouseButton)}
                                     />
                                 );
                             })}
@@ -112,11 +99,7 @@ function Board() {
                     ))}
                 </div>
                 {gameOver && (
-                    <button
-                        className="new-game-button"
-                        onClick={startNewGame}
-                        type="button"
-                    >
+                    <button className="new-game-button" onClick={startNewGame} type="button">
                         Új játék
                     </button>
                 )}

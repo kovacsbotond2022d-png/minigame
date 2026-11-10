@@ -23,3 +23,16 @@ export function getGameResult(squares) {
 
     return { winner: null, isDraw: false };
 }
+
+export function win_check(status, player, setWinner, setGameOver) {
+    const result = getGameResult(status);
+
+    if (result.winner === player) {
+        setWinner(player);
+        setGameOver(true);
+    } else if (result.isDraw) {
+        setGameOver(true);
+    }
+
+    return result;
+}
